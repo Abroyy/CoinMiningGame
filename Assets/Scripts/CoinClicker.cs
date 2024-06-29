@@ -4,61 +4,62 @@ using System;
 
 public class CoinClicker : MonoBehaviour
 {
-    public Text scoreText; // Skoru gösteren Text bileþeni
-    public Text energyText; // Enerji seviyesini gösteren Text bileþeni
+    public Text scoreText; // Skoru gï¿½steren Text bileï¿½eni
+    public Text energyText; // Enerji seviyesini gï¿½steren Text bileï¿½eni
     public Text levelText;
-    public Slider levelBar; // Levelbar için UI Slider referansý// Oyuncunun seviyesini gösteren Text bileþeni
-    public Text itemCostText; // Enerji kapasitesini artýran ürünün maliyetini gösteren Text bileþeni
-    public Text touchItemCostText; // "Touch" ürünü maliyetini gösteren Text bileþeni
+    public Slider levelBar; // Levelbar iï¿½in UI Slider referansï¿½// Oyuncunun seviyesini gï¿½steren Text bileï¿½eni
+    public Text itemCostText; // Enerji kapasitesini artï¿½ran ï¿½rï¿½nï¿½n maliyetini gï¿½steren Text bileï¿½eni
+    public Text touchItemCostText; // "Touch" ï¿½rï¿½nï¿½ maliyetini gï¿½steren Text bileï¿½eni
     public Text levelclickText;
 
     private float clicksayisi;
-    private float score; // Skoru tutan deðiþken
-    public Animator coinAnimator; // Coin animatörü
+    private float score; // Skoru tutan deï¿½iï¿½ken
+    public Animator coinAnimator; // Coin animatï¿½rï¿½
     public string animationTriggerName = "Clicked"; // Animasyon tetikleyicisi
-    private string scorePlayerPrefsKey = "PlayerScore"; // Skor için PlayerPrefs anahtarý
+    private string scorePlayerPrefsKey = "PlayerScore"; // Skor iï¿½in PlayerPrefs anahtarï¿½
     private string clicksayisiPlayerPrefsKey = "Playerclicksayisi";
 
-    public RectTransform yellowBar; // Sarý barýn RectTransform'u
-    public float maxBarWidth = 850f; // Sarý barýn yüzde 100 dolu olduðundaki geniþliði
-    public float energyDrainPerClick = 1f; // Her týklamada harcanacak enerji oraný
-    private float currentEnergy; // Mevcut enerji miktarý
-    private float fillDuration = 3600.0f; // Dolum süresi (saniye cinsinden)
-    private string energyStartTimeKey = "EnergyStartTime"; // Enerji baþlangýç zamaný için PlayerPrefs anahtarý
-    private string currentEnergyKey = "CurrentEnergy"; // Mevcut enerji için PlayerPrefs anahtarý
-    private DateTime lastUpdateTime; // Son güncelleme zamaný
+    public RectTransform yellowBar; // Sarï¿½ barï¿½n RectTransform'u
+    public float maxBarWidth = 850f; // Sarï¿½ barï¿½n yï¿½zde 100 dolu olduï¿½undaki geniï¿½liï¿½i
+    public float energyDrainPerClick = 1f; // Her tï¿½klamada harcanacak enerji oranï¿½
+    private float currentEnergy; // Mevcut enerji miktarï¿½
+    private float fillDuration = 3600.0f; // Dolum sï¿½resi (saniye cinsinden)
 
-    private string currentLevelKey = "CurrentLevel"; // Oyuncunun seviyesi için PlayerPrefs anahtarý
-    private int currentLevel = 1; // Oyuncunun baþlangýç seviyesi
-    public float[] levelThresholds; // Level sýnýrlarý
+    private string energyStartTimeKey = "EnergyStartTime"; // Enerji baï¿½langï¿½ï¿½ zamanï¿½ iï¿½in PlayerPrefs anahtarï¿½
+    private string currentEnergyKey = "CurrentEnergy"; // Mevcut enerji iï¿½in PlayerPrefs anahtarï¿½
+    private DateTime lastUpdateTime; // Son gï¿½ncelleme zamanï¿½
 
-    private string currentMaxEnergyKey = "CurrentMaxEnergy"; // Maksimum enerji kapasitesi için PlayerPrefs anahtarý
-    private float currentMaxEnergy = 1000f; // Baþlangýçta enerji kapasitesi 1000
-    private float energyIncreaseStep = 500f; // Enerji artýþ adýmý
+    private string currentLevelKey = "CurrentLevel"; // Oyuncunun seviyesi iï¿½in PlayerPrefs anahtarï¿½
+    private int currentLevel = 1; // Oyuncunun baï¿½langï¿½ï¿½ seviyesi
+    public float[] levelThresholds; // Level sï¿½nï¿½rlarï¿½
 
-    private string itemCostKey = "ItemCost"; // Enerji kapasitesi artýran ürünün maliyeti için PlayerPrefs anahtarý
-    private float initialItemCost = 0.5f; // Enerji kapasitesi artýran ürünün baþlangýç maliyeti
-    private float currentItemCost; // Mevcut ürün maliyeti
+    private string currentMaxEnergyKey = "CurrentMaxEnergy"; // Maksimum enerji kapasitesi iï¿½in PlayerPrefs anahtarï¿½
+    private float currentMaxEnergy = 1000f; // Baï¿½langï¿½ï¿½ta enerji kapasitesi 1000
+    private float energyIncreaseStep = 500f; // Enerji artï¿½ï¿½ adï¿½mï¿½
+
+    private string itemCostKey = "ItemCost"; // Enerji kapasitesi artï¿½ran ï¿½rï¿½nï¿½n maliyeti iï¿½in PlayerPrefs anahtarï¿½
+    private float initialItemCost = 0.5f; // Enerji kapasitesi artï¿½ran ï¿½rï¿½nï¿½n baï¿½langï¿½ï¿½ maliyeti
+    private float currentItemCost; // Mevcut ï¿½rï¿½n maliyeti
 
     private float touchClickValue = 1f;
-    private float touchCoinValue = 0.01f; // Týklama baþýna baþlangýç coini
-    private string touchCoinValueKey = "TouchCoinValue"; // Týklama baþýna coin için PlayerPrefs anahtarý
+    private float touchCoinValue = 0.01f; // Tï¿½klama baï¿½ï¿½na baï¿½langï¿½ï¿½ coini
+    private string touchCoinValueKey = "TouchCoinValue"; // Tï¿½klama baï¿½ï¿½na coin iï¿½in PlayerPrefs anahtarï¿½
     private string touchClickValueKey = "TouchClickValue";
 
-    private string touchItemCostKey = "TouchItemCost"; // "Touch" ürünü maliyeti için PlayerPrefs anahtarý
-    private float initialTouchItemCost = 0.5f; // "Touch" ürünü baþlangýç maliyeti
-    private float currentTouchItemCost; // Mevcut "Touch" ürünü maliyeti
+    private string touchItemCostKey = "TouchItemCost"; // "Touch" ï¿½rï¿½nï¿½ maliyeti iï¿½in PlayerPrefs anahtarï¿½
+    private float initialTouchItemCost = 0.5f; // "Touch" ï¿½rï¿½nï¿½ baï¿½langï¿½ï¿½ maliyeti
+    private float currentTouchItemCost; // Mevcut "Touch" ï¿½rï¿½nï¿½ maliyeti
 
-    public Text energyFillSpeedupCostText; // Enerji doldurma süresini hýzlandýrma maliyetini gösteren Text bileþeni
-    private string energyFillSpeedupCostKey = "EnergyFillSpeedupCost"; // Enerji doldurma süresini hýzlandýrma maliyeti için PlayerPrefs anahtarý
+    public Text energyFillSpeedupCostText; // Enerji doldurma sï¿½resini hï¿½zlandï¿½rma maliyetini gï¿½steren Text bileï¿½eni
+    private string energyFillSpeedupCostKey = "EnergyFillSpeedupCost"; // Enerji doldurma sï¿½resini hï¿½zlandï¿½rma maliyeti iï¿½in PlayerPrefs anahtarï¿½
     private float energyFillSpeedupCost = 0.5f;
 
-    public Text unlimitedEnergyCostText; // Sýnýrsýz enerji ürününün maliyetini gösteren Text bileþeni
-    private float unlimitedEnergyCost = 1f; // Sýnýrsýz enerji ürününün maliyeti
-    private TimeSpan unlimitedEnergyDuration = TimeSpan.FromMinutes(10); // Sýnýrsýz enerji süresi (10 dakika)
-    private DateTime unlimitedEnergyEndTime; // Sýnýrsýz enerjinin bitiþ zamaný
-    private bool isUnlimitedEnergyActive = false; // Sýnýrsýz enerjinin aktif olup olmadýðýný belirten bayrak
-    private string unlimitedEnergyEndTimeKey = "UnlimitedEnergyEndTime"; // Sýnýrsýz enerji bitiþ zamaný için PlayerPrefs anahtarý
+    public Text unlimitedEnergyCostText; // Sï¿½nï¿½rsï¿½z enerji ï¿½rï¿½nï¿½nï¿½n maliyetini gï¿½steren Text bileï¿½eni
+    private float unlimitedEnergyCost = 1f; // Sï¿½nï¿½rsï¿½z enerji ï¿½rï¿½nï¿½nï¿½n maliyeti
+    private TimeSpan unlimitedEnergyDuration = TimeSpan.FromMinutes(10); // Sï¿½nï¿½rsï¿½z enerji sï¿½resi (10 dakika)
+    private DateTime unlimitedEnergyEndTime; // Sï¿½nï¿½rsï¿½z enerjinin bitiï¿½ zamanï¿½
+    private bool isUnlimitedEnergyActive = false; // Sï¿½nï¿½rsï¿½z enerjinin aktif olup olmadï¿½ï¿½ï¿½nï¿½ belirten bayrak
+    private string unlimitedEnergyEndTimeKey = "UnlimitedEnergyEndTime"; // Sï¿½nï¿½rsï¿½z enerji bitiï¿½ zamanï¿½ iï¿½in PlayerPrefs anahtarï¿½
 
     public GameObject yetersizcoinpaneli;
     public Animator yetersizcoinanim;
@@ -72,19 +73,19 @@ public class CoinClicker : MonoBehaviour
         }
         else
         {
-            clicksayisi = 0f; // Eðer kaydedilmiþ skor yoksa varsayýlan olarak 0 kabul edilir
+            clicksayisi = 0f; // Eï¿½er kaydedilmiï¿½ skor yoksa varsayï¿½lan olarak 0 kabul edilir
         }
-        // Oyun baþladýðýnda kaydedilmiþ skoru yükle
+        // Oyun baï¿½ladï¿½ï¿½ï¿½nda kaydedilmiï¿½ skoru yï¿½kle
         if (PlayerPrefs.HasKey(scorePlayerPrefsKey))
         {
             score = PlayerPrefs.GetFloat(scorePlayerPrefsKey);
         }
         else
         {
-            score = 0f; // Eðer kaydedilmiþ skor yoksa varsayýlan olarak 0 kabul edilir
+            score = 0f; // Eï¿½er kaydedilmiï¿½ skor yoksa varsayï¿½lan olarak 0 kabul edilir
         }
 
-        // Enerjinin baþlangýç zamanýný kaydet veya yükle
+        // Enerjinin baï¿½langï¿½ï¿½ zamanï¿½nï¿½ kaydet veya yï¿½kle
         if (PlayerPrefs.HasKey(energyStartTimeKey))
         {
             lastUpdateTime = DateTime.Parse(PlayerPrefs.GetString(energyStartTimeKey));
@@ -96,24 +97,24 @@ public class CoinClicker : MonoBehaviour
             PlayerPrefs.Save();
         }
 
-        // Kaydedilmiþ mevcut enerji seviyesini yükle
+        // Kaydedilmiï¿½ mevcut enerji seviyesini yï¿½kle
         if (PlayerPrefs.HasKey(currentEnergyKey))
         {
             currentEnergy = PlayerPrefs.GetFloat(currentEnergyKey);
         }
         else
         {
-            currentEnergy = 1000f; // Baþlangýçta enerji dolu
+            currentEnergy = 1000f; // Baï¿½langï¿½ï¿½ta enerji dolu
         }
 
-        // Kaydedilmiþ mevcut seviyeyi yükle
+        // Kaydedilmiï¿½ mevcut seviyeyi yï¿½kle
         if (PlayerPrefs.HasKey(currentLevelKey))
         {
             currentLevel = PlayerPrefs.GetInt(currentLevelKey);
         }
         else
         {
-            currentLevel = 1; // Baþlangýçta seviye 1
+            currentLevel = 1; // Baï¿½langï¿½ï¿½ta seviye 1
         }
 
         if (PlayerPrefs.HasKey(currentMaxEnergyKey))
@@ -122,17 +123,17 @@ public class CoinClicker : MonoBehaviour
         }
         else
         {
-            currentMaxEnergy = 1000f; // Baþlangýçta enerji kapasitesi yüzde 100
+            currentMaxEnergy = 1000f; // Baï¿½langï¿½ï¿½ta enerji kapasitesi yï¿½zde 100
         }
 
-        // Mevcut ürün maliyetini yükle
+        // Mevcut ï¿½rï¿½n maliyetini yï¿½kle
         if (PlayerPrefs.HasKey(itemCostKey))
         {
             currentItemCost = PlayerPrefs.GetFloat(itemCostKey);
         }
         else
         {
-            currentItemCost = initialItemCost; // Baþlangýç maliyeti
+            currentItemCost = initialItemCost; // Baï¿½langï¿½ï¿½ maliyeti
         }
 
         if (PlayerPrefs.HasKey(touchCoinValueKey))
@@ -141,7 +142,7 @@ public class CoinClicker : MonoBehaviour
         }
         else
         {
-            touchCoinValue = 0.01f; // Baþlangýç deðeri
+            touchCoinValue = 0.01f; // Baï¿½langï¿½ï¿½ deï¿½eri
         }
 
         if (PlayerPrefs.HasKey(touchClickValueKey))
@@ -150,17 +151,17 @@ public class CoinClicker : MonoBehaviour
         }
         else
         {
-            touchClickValue = 1f; // Baþlangýç deðeri
+            touchClickValue = 1f; // Baï¿½langï¿½ï¿½ deï¿½eri
         }
 
-        // Mevcut "Touch" ürünü maliyetini yükle
+        // Mevcut "Touch" ï¿½rï¿½nï¿½ maliyetini yï¿½kle
         if (PlayerPrefs.HasKey(touchItemCostKey))
         {
             currentTouchItemCost = PlayerPrefs.GetFloat(touchItemCostKey);
         }
         else
         {
-            currentTouchItemCost = initialTouchItemCost; // Baþlangýç maliyeti
+            currentTouchItemCost = initialTouchItemCost; // Baï¿½langï¿½ï¿½ maliyeti
         }
 
         if (PlayerPrefs.HasKey(energyFillSpeedupCostKey))
@@ -169,7 +170,7 @@ public class CoinClicker : MonoBehaviour
         }
         else
         {
-            energyFillSpeedupCost = 0.5f; // Baþlangýç maliyeti
+            energyFillSpeedupCost = 0.5f; // Baï¿½langï¿½ï¿½ maliyeti
         }
 
         if (PlayerPrefs.HasKey(unlimitedEnergyEndTimeKey))
@@ -183,19 +184,19 @@ public class CoinClicker : MonoBehaviour
             isUnlimitedEnergyActive = false;
         }
 
-        UpdateUnlimitedEnergyCostText(); // Baþlangýçta sýnýrsýz enerji ürün maliyetini güncelle
+        UpdateUnlimitedEnergyCostText(); // Baï¿½langï¿½ï¿½ta sï¿½nï¿½rsï¿½z enerji ï¿½rï¿½n maliyetini gï¿½ncelle
 
         UpdateTouchItemCostText();
 
         UpdateItemCostText();
-        UpdateEnergyFillSpeedupCostText();// Baþlangýçta ürün maliyetini güncelle
+        UpdateEnergyFillSpeedupCostText();// Baï¿½langï¿½ï¿½ta ï¿½rï¿½n maliyetini gï¿½ncelle
 
-        // Geçen süreyi hesapla ve enerji seviyesini güncelle
+        // Geï¿½en sï¿½reyi hesapla ve enerji seviyesini gï¿½ncelle
         UpdateEnergyOnStart();
 
         UpdateScoreText();
         UpdateEnergyBar();
-        UpdateLevelText(); // Baþlangýçta seviyeyi güncelle
+        UpdateLevelText(); // Baï¿½langï¿½ï¿½ta seviyeyi gï¿½ncelle
         InitializeLevelBar();
 
         yetersizcoinpaneli.SetActive(false);
@@ -203,17 +204,17 @@ public class CoinClicker : MonoBehaviour
 
     void Update()
     {
-        // Geçen süreyi hesapla
+        // Geï¿½en sï¿½reyi hesapla
         float timeElapsed = (float)(DateTime.Now - lastUpdateTime).TotalSeconds;
 
-        // Enerji miktarýný zamana göre yeni kapasiteye göre güncelle
+        // Enerji miktarï¿½nï¿½ zamana gï¿½re yeni kapasiteye gï¿½re gï¿½ncelle
         float energyIncrease = (timeElapsed / fillDuration) * currentMaxEnergy;
         currentEnergy = Mathf.Clamp(currentEnergy + energyIncrease, 0, currentMaxEnergy);
 
-        // Güncellenen enerji miktarýný bar üzerinde göster
+        // Gï¿½ncellenen enerji miktarï¿½nï¿½ bar ï¿½zerinde gï¿½ster
         UpdateEnergyBar();
 
-        // Güncellenmiþ son zaman kaydýný yap
+        // Gï¿½ncellenmiï¿½ son zaman kaydï¿½nï¿½ yap
         lastUpdateTime = DateTime.Now;
         PlayerPrefs.SetString(energyStartTimeKey, lastUpdateTime.ToString());
         PlayerPrefs.Save();
@@ -221,7 +222,7 @@ public class CoinClicker : MonoBehaviour
         if (isUnlimitedEnergyActive && DateTime.Now >= unlimitedEnergyEndTime)
         {
             isUnlimitedEnergyActive = false;
-            PlayerPrefs.DeleteKey(unlimitedEnergyEndTimeKey); // Süre bittiðinde keyi sil
+            PlayerPrefs.DeleteKey(unlimitedEnergyEndTimeKey); // Sï¿½re bittiï¿½inde keyi sil
         }
         CheckAndUpdateLevel();
     }
@@ -239,7 +240,7 @@ public class CoinClicker : MonoBehaviour
             }
             else
             {
-                Debug.LogError("Animator bileþeni atanmadý!");
+                Debug.LogError("Animator bileï¿½eni atanmadï¿½!");
             }
             UpdateScoreText();
             CheckAndUpdateLevel();
@@ -254,7 +255,7 @@ public class CoinClicker : MonoBehaviour
             }
             else
             {
-                Debug.LogError("Animator bileþeni atanmadý!");
+                Debug.LogError("Animator bileï¿½eni atanmadï¿½!");
             }
             UpdateScoreText();
             currentEnergy -= energyDrainPerClick;
@@ -271,7 +272,7 @@ public class CoinClicker : MonoBehaviour
 
     public void BuyEnergyIncreaseItem()
     {
-        // Ürünün maliyetini yükle veya varsayýlan maliyeti ata
+        // ï¿½rï¿½nï¿½n maliyetini yï¿½kle veya varsayï¿½lan maliyeti ata
         if (PlayerPrefs.HasKey(itemCostKey))
         {
             currentItemCost = PlayerPrefs.GetFloat(itemCostKey);
@@ -281,27 +282,27 @@ public class CoinClicker : MonoBehaviour
             currentItemCost = initialItemCost;
         }
 
-        // Yeterli coini olup olmadýðýný kontrol et
+        // Yeterli coini olup olmadï¿½ï¿½ï¿½nï¿½ kontrol et
         if (score >= currentItemCost)
         {
-            score -= currentItemCost; // Coin'lerden maliyeti düþ
-            UpdateScoreText(); // Skoru güncelle
+            score -= currentItemCost; // Coin'lerden maliyeti dï¿½ï¿½
+            UpdateScoreText(); // Skoru gï¿½ncelle
 
             float previousMaxEnergy = currentMaxEnergy;
-            currentMaxEnergy += energyIncreaseStep; // Maksimum enerji kapasitesini artýr
+            currentMaxEnergy += energyIncreaseStep; // Maksimum enerji kapasitesini artï¿½r
 
-            // Enerji miktarýný yeni kapasiteye göre güncelle
+            // Enerji miktarï¿½nï¿½ yeni kapasiteye gï¿½re gï¿½ncelle
             currentEnergy = (currentEnergy / previousMaxEnergy) * currentMaxEnergy;
 
             SaveMaxEnergyState(); // Enerji kapasitesi durumunu kaydet
 
-            currentItemCost *= 2; // Ürünün maliyetini iki katýna çýkar
-            SaveItemCost(); // Ürün maliyetini kaydet
+            currentItemCost *= 2; // ï¿½rï¿½nï¿½n maliyetini iki katï¿½na ï¿½ï¿½kar
+            SaveItemCost(); // ï¿½rï¿½n maliyetini kaydet
 
-            UpdateItemCostText(); // Ürün maliyetini güncelle
-            UpdateEnergyBar(); // Enerji barýný güncelle
+            UpdateItemCostText(); // ï¿½rï¿½n maliyetini gï¿½ncelle
+            UpdateEnergyBar(); // Enerji barï¿½nï¿½ gï¿½ncelle
 
-            Debug.Log("Enerji kapasitesi arttýrýldý! Yeni maksimum kapasite: " + currentMaxEnergy);
+            Debug.Log("Enerji kapasitesi arttï¿½rï¿½ldï¿½! Yeni maksimum kapasite: " + currentMaxEnergy);
         }
         else
         {
@@ -312,7 +313,7 @@ public class CoinClicker : MonoBehaviour
 
         CheckAndUpdateLevel();
 
-        // Level text ve slider güncelleme
+        // Level text ve slider gï¿½ncelleme
         UpdateLevelText();
         UpdateLevelBar(score);
     }
@@ -320,7 +321,7 @@ public class CoinClicker : MonoBehaviour
 
     public void BuyTouchIncreaseItem()
     {
-        // Ürünün maliyetini yükle veya varsayýlan maliyeti ata
+        // ï¿½rï¿½nï¿½n maliyetini yï¿½kle veya varsayï¿½lan maliyeti ata
         if (PlayerPrefs.HasKey(touchItemCostKey))
         {
             currentTouchItemCost = PlayerPrefs.GetFloat(touchItemCostKey);
@@ -330,21 +331,21 @@ public class CoinClicker : MonoBehaviour
             currentTouchItemCost = initialTouchItemCost;
         }
 
-        // Yeterli coini olup olmadýðýný kontrol et
+        // Yeterli coini olup olmadï¿½ï¿½ï¿½nï¿½ kontrol et
         if (score >= currentTouchItemCost)
         {
-            score -= currentTouchItemCost; // Coin'lerden maliyeti düþ
-            UpdateScoreText(); // Skoru güncelle
+            score -= currentTouchItemCost; // Coin'lerden maliyeti dï¿½ï¿½
+            UpdateScoreText(); // Skoru gï¿½ncelle
 
-            touchCoinValue += 0.01f; // Týklama baþýna coin miktarýný iki katýna çýkar
-            SaveTouchCoinValue(); // Týklama baþýna coin miktarýný kaydet
+            touchCoinValue += 0.01f; // Tï¿½klama baï¿½ï¿½na coin miktarï¿½nï¿½ iki katï¿½na ï¿½ï¿½kar
+            SaveTouchCoinValue(); // Tï¿½klama baï¿½ï¿½na coin miktarï¿½nï¿½ kaydet
 
-            currentTouchItemCost *= 2; // Ürünün maliyetini iki katýna çýkar
-            SaveTouchItemCost(); // Ürün maliyetini kaydet
+            currentTouchItemCost *= 2; // ï¿½rï¿½nï¿½n maliyetini iki katï¿½na ï¿½ï¿½kar
+            SaveTouchItemCost(); // ï¿½rï¿½n maliyetini kaydet
 
-            UpdateTouchItemCostText(); // Ürün maliyetini güncelle
+            UpdateTouchItemCostText(); // ï¿½rï¿½n maliyetini gï¿½ncelle
 
-            Debug.Log("Týklama baþýna coin miktarý artýrýldý! Yeni miktar: " + touchCoinValue);
+            Debug.Log("Tï¿½klama baï¿½ï¿½na coin miktarï¿½ artï¿½rï¿½ldï¿½! Yeni miktar: " + touchCoinValue);
         }
         else
         {
@@ -355,41 +356,41 @@ public class CoinClicker : MonoBehaviour
 
         CheckAndUpdateLevel();
 
-        // Level text ve slider güncelleme
+        // Level text ve slider gï¿½ncelleme
         UpdateLevelText();
         UpdateLevelBar(score);
     }
 
     public void BuyEnergyFillSpeedupItem()
     {
-        // Enerji doldurma süresini hýzlandýrma maliyetini yükle veya varsayýlan maliyeti ata
+        // Enerji doldurma sï¿½resini hï¿½zlandï¿½rma maliyetini yï¿½kle veya varsayï¿½lan maliyeti ata
         if (PlayerPrefs.HasKey(energyFillSpeedupCostKey))
         {
             energyFillSpeedupCost = PlayerPrefs.GetFloat(energyFillSpeedupCostKey);
         }
         else
         {
-            energyFillSpeedupCost = 0.5f; // Baþlangýç maliyeti
+            energyFillSpeedupCost = 0.5f; // Baï¿½langï¿½ï¿½ maliyeti
         }
 
-        // Yeterli coin olup olmadýðýný kontrol et
+        // Yeterli coin olup olmadï¿½ï¿½ï¿½nï¿½ kontrol et
         if (score >= energyFillSpeedupCost)
         {
-            // Enerji doldurma süresini azalt
-            fillDuration = Mathf.Max(fillDuration - 300f, 300f); // En az 300 saniyeye düþür, daha da düþürme
+            // Enerji doldurma sï¿½resini azalt
+            fillDuration = Mathf.Max(fillDuration - 300f, 300f); // En az 300 saniyeye dï¿½ï¿½ï¿½r, daha da dï¿½ï¿½ï¿½rme
 
-            // Coin'lerden maliyeti düþ
+            // Coin'lerden maliyeti dï¿½ï¿½
             score -= energyFillSpeedupCost;
-            UpdateScoreText(); // Skoru güncelle
+            UpdateScoreText(); // Skoru gï¿½ncelle
 
-            // Maliyeti iki katýna çýkar
+            // Maliyeti iki katï¿½na ï¿½ï¿½kar
             energyFillSpeedupCost *= 2;
-            SaveEnergyFillSpeedupCost(); // Enerji doldurma süresini hýzlandýrma maliyetini kaydet
+            SaveEnergyFillSpeedupCost(); // Enerji doldurma sï¿½resini hï¿½zlandï¿½rma maliyetini kaydet
 
-            // UI'ý güncelle
-            UpdateEnergyFillSpeedupCostText(); // Enerji doldurma süresini hýzlandýrma maliyetini güncelle
+            // UI'ï¿½ gï¿½ncelle
+            UpdateEnergyFillSpeedupCostText(); // Enerji doldurma sï¿½resini hï¿½zlandï¿½rma maliyetini gï¿½ncelle
 
-            Debug.Log("Enerji doldurma süresi hýzlandýrýldý! Yeni dolum süresi: " + fillDuration + " saniye");
+            Debug.Log("Enerji doldurma sï¿½resi hï¿½zlandï¿½rï¿½ldï¿½! Yeni dolum sï¿½resi: " + fillDuration + " saniye");
         }
         else
         {
@@ -400,7 +401,7 @@ public class CoinClicker : MonoBehaviour
 
         CheckAndUpdateLevel();
 
-        // Level text ve slider güncelleme
+        // Level text ve slider gï¿½ncelleme
         UpdateLevelText();
         UpdateLevelBar(score);
     }
@@ -409,15 +410,15 @@ public class CoinClicker : MonoBehaviour
     {
         if (score >= unlimitedEnergyCost)
         {
-            score -= unlimitedEnergyCost; // Coin'lerden maliyeti düþ
-            UpdateScoreText(); // Skoru güncelle
+            score -= unlimitedEnergyCost; // Coin'lerden maliyeti dï¿½ï¿½
+            UpdateScoreText(); // Skoru gï¿½ncelle
 
             isUnlimitedEnergyActive = true;
             unlimitedEnergyEndTime = DateTime.Now.Add(unlimitedEnergyDuration); // 10 dakika ekle
             PlayerPrefs.SetString(unlimitedEnergyEndTimeKey, unlimitedEnergyEndTime.ToString());
             PlayerPrefs.Save();
 
-            Debug.Log("Sýnýrsýz enerji aktif! Bitim zamaný: " + unlimitedEnergyEndTime);
+            Debug.Log("Sï¿½nï¿½rsï¿½z enerji aktif! Bitim zamanï¿½: " + unlimitedEnergyEndTime);
         }
         else
         {
@@ -428,7 +429,7 @@ public class CoinClicker : MonoBehaviour
 
         CheckAndUpdateLevel();
 
-        // Level text ve slider güncelleme
+        // Level text ve slider gï¿½ncelleme
         UpdateLevelText();
         UpdateLevelBar(score);
     }
@@ -442,12 +443,12 @@ public class CoinClicker : MonoBehaviour
 
     private void UpdateItemCostText()
     {
-        itemCostText.text = $"{currentItemCost:F2}"; // Sadece sayý olarak maliyeti göster
+        itemCostText.text = $"{currentItemCost:F2}"; // Sadece sayï¿½ olarak maliyeti gï¿½ster
     }
 
     private void UpdateTouchItemCostText()
     {
-        touchItemCostText.text = $"{currentTouchItemCost:F2}"; // Sadece sayý olarak maliyeti göster
+        touchItemCostText.text = $"{currentTouchItemCost:F2}"; // Sadece sayï¿½ olarak maliyeti gï¿½ster
     }
 
     private void SaveEnergyFillSpeedupCost()
@@ -458,35 +459,35 @@ public class CoinClicker : MonoBehaviour
 
     private void UpdateEnergyFillSpeedupCostText()
     {
-        energyFillSpeedupCostText.text = $"{energyFillSpeedupCost:F2}"; // Sadece sayý olarak maliyeti göster
+        energyFillSpeedupCostText.text = $"{energyFillSpeedupCost:F2}"; // Sadece sayï¿½ olarak maliyeti gï¿½ster
     }
 
     private void UpdateUnlimitedEnergyCostText()
     {
-        unlimitedEnergyCostText.text = $"{unlimitedEnergyCost:F2}"; // Sadece sayý olarak maliyeti göster
+        unlimitedEnergyCostText.text = $"{unlimitedEnergyCost:F2}"; // Sadece sayï¿½ olarak maliyeti gï¿½ster
     }
 
     private void UpdateScoreText()
     {
-        scoreText.text = score.ToString("F2"); // Skoru iki ondalýk basamakla göster
+        scoreText.text = score.ToString("F2"); // Skoru iki ondalï¿½k basamakla gï¿½ster
         
     }
 
     private void UpdateEnergyBar()
     {
-        float normalizedEnergy = currentEnergy / currentMaxEnergy; // Enerjiyi yeni kapasiteye göre normalize et
+        float normalizedEnergy = currentEnergy / currentMaxEnergy; // Enerjiyi yeni kapasiteye gï¿½re normalize et
         float barWidth = normalizedEnergy * maxBarWidth;
         yellowBar.sizeDelta = new Vector2(barWidth, yellowBar.sizeDelta.y);
-        UpdateEnergyText(); // Enerji seviyesini güncelle
+        UpdateEnergyText(); // Enerji seviyesini gï¿½ncelle
     }
 
 
     private void UpdateEnergyText()
     {
-        // Enerji seviyesini tam sayýya yuvarla
+        // Enerji seviyesini tam sayï¿½ya yuvarla
         int roundedCurrentEnergy = Mathf.RoundToInt(currentEnergy);
         int roundedMaxEnergy = Mathf.RoundToInt(currentMaxEnergy);
-        // Text bileþenine enerji seviyesini yaz
+        // Text bileï¿½enine enerji seviyesini yaz
         energyText.text = $"{roundedCurrentEnergy}/{roundedMaxEnergy}";
     }
 
@@ -495,7 +496,7 @@ public class CoinClicker : MonoBehaviour
         float timeElapsed = (float)(DateTime.Now - lastUpdateTime).TotalSeconds;
         float energyGained = (timeElapsed / fillDuration) * currentMaxEnergy;
         currentEnergy = Mathf.Clamp(currentEnergy + energyGained, 0, currentMaxEnergy);
-        UpdateEnergyText(); // Enerji seviyesini güncelle
+        UpdateEnergyText(); // Enerji seviyesini gï¿½ncelle
     }
 
     private void SaveMaxEnergyState()
@@ -530,16 +531,16 @@ public class CoinClicker : MonoBehaviour
 
     private void InitializeLevelBar()
     {
-        // Levelbar'ýn minimum ve maksimum deðerlerini ayarla
+        // Levelbar'ï¿½n minimum ve maksimum deï¿½erlerini ayarla
         levelBar.minValue = 0;
-        levelBar.maxValue = 400; // Örneðin, maksimum deðeri 100 olarak düþünelim
+        levelBar.maxValue = 400; // ï¿½rneï¿½in, maksimum deï¿½eri 100 olarak dï¿½ï¿½ï¿½nelim
     }
 
     private void CheckAndUpdateLevel()
     {
         int newLevel = currentLevel;
 
-        // Level hesaplama mantýðýný buraya göre güncelleyin
+        // Level hesaplama mantï¿½ï¿½ï¿½nï¿½ buraya gï¿½re gï¿½ncelleyin
         if (score >= 1e9f)
         {
             newLevel = 10;
@@ -586,22 +587,22 @@ public class CoinClicker : MonoBehaviour
 
         float currentLevelThreshold = levelThresholds[currentLevel - 1];
         float nextLevelThreshold = currentLevel < levelThresholds.Length ? levelThresholds[currentLevel] : currentLevelThreshold;
-        // Score'a göre levelbar'ý güncelle
+        // Score'a gï¿½re levelbar'ï¿½ gï¿½ncelle
         UpdateLevelBar(score);
         levelclickText.text = clicksayisi.ToString("F0") + "/" + currentLevelThreshold.ToString();
     }
 
     private void UpdateLevelBar(float score)
     {
-        // Geçerli level için maksimum skor deðerlerini al
+        // Geï¿½erli level iï¿½in maksimum skor deï¿½erlerini al
         float maxScoreForCurrentLevel = GetMaxScoreForLevel(currentLevel);
         float maxScoreForNextLevel = GetMaxScoreForLevel(currentLevel + 1);
 
-        // Geçerli leveldeki skor miktarýnýn yüzdesini hesapla
+        // Geï¿½erli leveldeki skor miktarï¿½nï¿½n yï¿½zdesini hesapla
         float startScoreForCurrentLevel = maxScoreForCurrentLevel;
         float percentage = (score - startScoreForCurrentLevel) / (maxScoreForNextLevel - startScoreForCurrentLevel);
 
-        // Slider'ý yüzde deðerine göre güncelle
+        // Slider'ï¿½ yï¿½zde deï¿½erine gï¿½re gï¿½ncelle
         levelBar.value = Mathf.Lerp(levelBar.minValue, levelBar.maxValue, percentage);
     }
 
@@ -609,7 +610,7 @@ public class CoinClicker : MonoBehaviour
 
     private float GetMaxScoreForLevel(int level)
     {
-        // Her level için maksimum score deðerlerini döndüren bir metod
+        // Her level iï¿½in maksimum score deï¿½erlerini dï¿½ndï¿½ren bir metod
         switch (level)
         {
             case 2:
@@ -631,13 +632,13 @@ public class CoinClicker : MonoBehaviour
             case 10:
                 return 1e9f;
             default:
-                return 0f; // Eðer level tanýmlý deðilse sýfýr döndür
+                return 0f; // Eï¿½er level tanï¿½mlï¿½ deï¿½ilse sï¿½fï¿½r dï¿½ndï¿½r
         }
     }
 
     private void UpdateLevelText()
     {
-        // Levelin yazýlý olduðu UI Text'i güncelle
+        // Levelin yazï¿½lï¿½ olduï¿½u UI Text'i gï¿½ncelle
         levelText.text = "Level"+currentLevel.ToString();
     }
 
@@ -649,12 +650,12 @@ public class CoinClicker : MonoBehaviour
 
     private void OnDestroy()
     {
-        // Oyun kapatýldýðýnda skoru, enerji seviyesini ve enerji baþlangýç zamanýný kaydet
+        // Oyun kapatï¿½ldï¿½ï¿½ï¿½nda skoru, enerji seviyesini ve enerji baï¿½langï¿½ï¿½ zamanï¿½nï¿½ kaydet
         PlayerPrefs.SetFloat(scorePlayerPrefsKey, score);
         SaveEnergyState();
         SaveLevelState();
-        SaveTouchCoinValue(); // Týklama baþýna coin miktarýný kaydet
-        SaveTouchItemCost(); // "Touch" ürünü maliyetini kaydet
+        SaveTouchCoinValue(); // Tï¿½klama baï¿½ï¿½na coin miktarï¿½nï¿½ kaydet
+        SaveTouchItemCost(); // "Touch" ï¿½rï¿½nï¿½ maliyetini kaydet
         if (isUnlimitedEnergyActive)
         {
             PlayerPrefs.SetString(unlimitedEnergyEndTimeKey, unlimitedEnergyEndTime.ToString());
